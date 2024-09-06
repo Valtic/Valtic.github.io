@@ -15,3 +15,11 @@
 .slide-out {
     animation: slideOutToLeft 0.3s ease-out;
 }
+
+/* Ensure the sidebar is below the header on mobile */
+@media (max-width: 1023px) {
+    #sidebar {
+        top: 64px; /* Adjust this value based on your header height */
+        height: calc(100% - 64px);
+    }
+}
