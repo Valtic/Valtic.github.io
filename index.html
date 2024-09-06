@@ -9,266 +9,82 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-50 dark:bg-gray-900">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Backdrop Overlay -->
-        <div id="backdrop" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-20 hidden"></div>
-
-        <!-- Sidebar -->
-        <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 shadow-md fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 transition duration-300 ease-in-out z-30">
-            <div class="p-4 flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Admin Dashboard</h1>
-                <button id="closeSidebar" class="p-2 rounded-md lg:hidden">
-                    <i data-lucide="x" class="h-6 w-6 text-gray-500 dark:text-gray-400"></i>
-                </button>
+    <div class="flex flex-col h-screen overflow-hidden">
+        <!-- Header -->
+        <header class="bg-white dark:bg-gray-800 shadow z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center">
+                        <button id="sidebar-toggle" class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 lg:hidden">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                        <h1 class="ml-3 text-2xl font-bold text-gray-800 dark:text-white">Admin Dashboard</h1>
+                    </div>
+                    <div class="flex items-center">
+                        <button id="dark-mode-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <i data-lucide="moon" class="h-5 w-5 text-gray-500 dark:text-gray-400 hidden dark:block"></i>
+                            <i data-lucide="sun" class="h-5 w-5 text-gray-500 dark:text-gray-400 block dark:hidden"></i>
+                        </button>
+                        <button id="notifications-button" class="ml-3 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 relative">
+                            <i data-lucide="bell" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
+                            <span id="notification-badge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">0</span>
+                        </button>
+                        <div class="ml-3 relative">
+                            <button id="user-menu-button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <i data-lucide="user" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
+                            </button>
+                            <div id="user-menu" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 hidden">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('profile')">Profile</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('settings')">Settings</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <nav class="mt-6">
-                <a href="#" class="flex items-center px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('dashboard')">
-                    <i data-lucide="home" class="h-5 w-5 mr-3"></i>
-                    Dashboard
-                </a>
-                <div class="relative">
-                    <button id="reportsDropdown" class="w-full flex items-center justify-between px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <span class="flex items-center">
-                            <i data-lucide="file-text" class="h-5 w-5 mr-3"></i>
-                            Reports
-                        </span>
-                        <i data-lucide="chevron-down" class="h-4 w-4 transition-transform duration-200"></i>
-                    </button>
-                    <div id="reportsSubmenu" class="hidden pl-12 py-2 bg-gray-50 dark:bg-gray-700">
-                        <a href="#" class="block py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" onclick="loadReport('report1')">Report 1</a>
-                        <a href="#" class="block py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" onclick="loadReport('report2')">Report 2</a>
-                        <a href="#" class="block py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" onclick="loadReport('report3')">Report 3</a>
-                        <a href="#" class="block py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" onclick="loadReport('report4')">Report 4</a>
-                    </div>
-                </div>
-                <a href="#" class="flex items-center px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('users')">
-                    <i data-lucide="users" class="h-5 w-5 mr-3"></i>
-                    Users
-                </a>
-                <a href="#" class="flex items-center px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('settings')">
-                    <i data-lucide="settings" class="h-5 w-5 mr-3"></i>
-                    Settings
-                </a>
-                <a href="#" class="flex items-center px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <i data-lucide="help-circle" class="h-5 w-5 mr-3"></i>
-                    Help
-                </a>
-            </nav>
-        </aside>
+        </header>
 
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden lg:ml-64">
-            <!-- Header -->
-            <header class="flex justify-between items-center p-4 bg-white dark:bg-gray-800 shadow">
-                <div class="flex items-center">
-                    <button id="sidebar-toggle" class="p-2 rounded-md lg:hidden">
-                        <i data-lucide="menu" class="h-6 w-6 text-gray-500 dark:text-gray-400"></i>
-                    </button>
-                    <div class="relative ml-4">
-                        <input id="search-input" type="search" placeholder="Search..." class="w-64 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
-                        <div id="search-results" class="absolute left-0 mt-2 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg hidden z-10">
-                            <!-- Search results will be populated here -->
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Sidebar -->
+            <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 shadow-md fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 transition duration-300 ease-in-out z-20 mt-16 lg:mt-0">
+                <nav class="mt-5">
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('dashboard')">
+                        <i data-lucide="home" class="h-5 w-5 mr-3"></i>
+                        Dashboard
+                    </a>
+                    <div class="relative">
+                        <button id="reportsDropdown" class="w-full flex items-center justify-between px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <span class="flex items-center">
+                                <i data-lucide="file-text" class="h-5 w-5 mr-3"></i>
+                                Reports
+                            </span>
+                            <i data-lucide="chevron-down" class="h-4 w-4 transition-transform duration-200"></i>
+                        </button>
+                        <div id="reportsSubmenu" class="hidden pl-12 py-2 bg-gray-50 dark:bg-gray-700">
+                            <a href="#" class="block py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" onclick="loadReport('report1')">Report 1</a>
+                            <a href="#" class="block py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" onclick="loadReport('report2')">Report 2</a>
+                            <a href="#" class="block py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" onclick="loadReport('report3')">Report 3</a>
+                            <a href="#" class="block py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" onclick="loadReport('report4')">Report 4</a>
                         </div>
                     </div>
-                </div>
-                <div class="flex items-center">
-                    <button id="dark-mode-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 mr-2">
-                        <i data-lucide="moon" class="h-5 w-5 text-gray-500 dark:text-gray-400 hidden dark:block"></i>
-                        <i data-lucide="sun" class="h-5 w-5 text-gray-500 dark:text-gray-400 block dark:hidden"></i>
-                    </button>
-                    <button id="notifications-button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 mr-2 relative">
-                        <i data-lucide="bell" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
-                        <span id="notification-badge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">0</span>
-                    </button>
-                    <button id="user-menu-button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 relative">
-                        <i data-lucide="user" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
-                    </button>
-                    <div id="user-menu" class="absolute right-4 mt-12 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg hidden z-10">
-                        <a href="#" class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('profile')">Profile</a>
-                        <a href="#" class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('settings')">Settings</a>
-                        <a href="#" class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="logout()">Logout</a>
-                    </div>
-                </div>
-            </header>
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('users')">
+                        <i data-lucide="users" class="h-5 w-5 mr-3"></i>
+                        Users
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('settings')">
+                        <i data-lucide="settings" class="h-5 w-5 mr-3"></i>
+                        Settings
+                    </a>
+                    <a href="#" class="flex items-center px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i data-lucide="help-circle" class="h-5 w-5 mr-3"></i>
+                        Help
+                    </a>
+                </nav>
+            </aside>
 
-            <!-- Dashboard Content -->
-            <main id="main-content" class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 p-6">
-                <div id="dashboard-page">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Total Revenue</h2>
-                                <i data-lucide="dollar-sign" class="h-6 w-6 text-gray-400 dark:text-gray-500"></i>
-                            </div>
-                            <div class="text-3xl font-bold text-gray-900 dark:text-white">$45,231.89</div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">+20.1% from last month</p>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Subscriptions</h2>
-                                <i data-lucide="users" class="h-6 w-6 text-gray-400 dark:text-gray-500"></i>
-                            </div>
-                            <div class="text-3xl font-bold text-gray-900 dark:text-white">+2,350</div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">+180.1% from last month</p>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Sales</h2>
-                                <i data-lucide="shopping-cart" class="h-6 w-6 text-gray-400 dark:text-gray-500"></i>
-                            </div>
-                            <div class="text-3xl font-bold text-gray-900 dark:text-white">+12,234</div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">+19% from last month</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-                        <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Overview</h2>
-                        <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded">
-                            <!-- Placeholder for chart -->
-                            <div class="flex items-center justify-center h-full">
-                                <p class="text-gray-500 dark:text-gray-400">Chart Placeholder</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="profile-page" class="hidden">
-                    <div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                        <h2 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">User Profile</h2>
-                        <form id="profile-form" onsubmit="return updateProfile(event)">
-                            <div class="mb-4">
-                                <label for="fullName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
-                                <input type="text" id="fullName" name="fullName" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="John Doe" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
-                                <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="john@example.com" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bio</label>
-                                <textarea id="bio" name="bio" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Tell us about yourself"></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                                Save Changes
-                            </button>
-                        </form>
-                        <div class="mt-8">
-                            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">User Statistics</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                                    <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Total Posts</h4>
-                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">152</p>
-                                </div>
-                                <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                                    <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Followers</h4>
-                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">1,234</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-8">
-                            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Recent Activity</h3>
-                            <ul class="space-y-4">
-                                <li class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                                    <p class="text-gray-700 dark:text-gray-300">Posted a new article: "10 Tips for Effective Time Management"</p>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">2 days ago</p>
-                                </li>
-                                <li class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                                    <p class="text-gray-700 dark:text-gray-300">Commented on "The Future of AI in Business"</p>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">5 days ago</p>
-                                </li>
-                                <li class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                                    <p class="text-gray-700 dark:text-gray-300">Liked "How to Build a Successful Start-up"</p>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">1 week ago</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="login-page" class="hidden">
-                    <div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                        <h2 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">Login</h2>
-                        <form id="login-form" onsubmit="return login(event)">
-                            <div class="mb-4">
-                                <label for="loginEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
-                                <input type="email" id="loginEmail" name="loginEmail" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="your@email.com" required>
-                            </div>
-                            <div class="mb-6">
-                                <label for="loginPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
-                                <input type="password" id="loginPassword" name="loginPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="••••••••" required minlength="8">
-                            </div>
-                            <button type="submit" class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                                Log In
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <div id="report-page" class="hidden">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                        <h2 id="report-title" class="text-2xl font-semibold mb-6 text-gray-800 dark:text-white"></h2>
-                        <div id="report-content"></div>
-                    </div>
-                </div>
-
-                <div id="users-page" class="hidden">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                        <h2 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">User Management</h2>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Role</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700" id="users-table-body">
-                                    <!-- User rows will be dynamically added here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="settings-page" class="hidden">
-                    <div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                        <h2 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">Settings</h2>
-                        <form id="settings-form" onsubmit="return updateSettings(event)">
-                            <div class="mb-4">
-                                <label for="siteTitle" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Site Title</label>
-                                <input type="text" id="siteTitle" name="siteTitle" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="My Admin Dashboard" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="dateFormat" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date Format</label>
-                                <select id="dateFormat" name="dateFormat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                                    <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label for="timezone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Timezone</label>
-                                <select id="timezone" name="timezone" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="UTC">UTC</option>
-                                    <option value="America/New_York">America/New_York</option>
-                                    <option value="Europe/London">Europe/London</option>
-                                    <option value="Asia/Tokyo">Asia/Tokyo</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="flex items-center">
-                                    <input type="checkbox" id="enableNotifications" name="enableNotifications" class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50">
-                                    <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Enable email notifications</span>
-                                </label>
-                            </div>
-                            <button type="submit" class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                                Save Settings
-                            </button>
-                        </form>
-                    </div>
-                </div>
+            <!-- Main Content -->
+            <main id="main-content" class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 p-6 lg:ml-64">
+                <!-- Content for different pages will be dynamically loaded here -->
             </main>
         </div>
     </div>
